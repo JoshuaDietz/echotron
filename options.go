@@ -18,6 +18,8 @@
 
 package echotron
 
+import "fmt"
+
 // ParseMode is a custom type for the various frequent options used by some methods of the API.
 type ParseMode string
 
@@ -580,6 +582,29 @@ func NewMessageID(chatID int64, messageID int) MessageIDOptions {
 // NewInlineMessageID is a wrapper for MessageIDOptions which only fills the inlineMessageID fields.
 func NewInlineMessageID(ID string) MessageIDOptions {
 	return MessageIDOptions{inlineMessageID: ID}
+}
+
+// NewChatIdentifierId generates a chat identifier with the given id
+func NewChatIdentifierId(id int64) ChatIdentifier {
+	return ChatIdentifier{Id: id}
+}
+
+// NewChatIdentifierUsername generates a chat identifier with the given username
+func NewChatIdentifierUsername(username string) ChatIdentifier {
+	return ChatIdentifier{Username: username}
+}
+
+type ChatIdentifier struct {
+	Id       int64
+	Username string
+}
+
+// Get returns the chat identifier as a string (either userId or username)
+func (c *ChatIdentifier) Get() string {
+	if c.Id != 0 {
+		return fmt.Sprint(c.Id)
+	}
+	return c.Username
 }
 
 // MessageTextOptions contains the optional parameters used by the EditMessageText method.

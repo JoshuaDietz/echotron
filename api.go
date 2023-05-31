@@ -107,11 +107,11 @@ func (a API) Close() (res APIResponseBool, err error) {
 }
 
 // SendMessage is used to send text messages.
-func (a API) SendMessage(text string, chatID int64, opts *MessageOptions) (res APIResponseMessage, err error) {
+func (a API) SendMessage(text string, chatID ChatIdentifier, opts *MessageOptions) (res APIResponseMessage, err error) {
 	var vals = make(url.Values)
 
 	vals.Set("text", text)
-	vals.Set("chat_id", itoa(chatID))
+	vals.Set("chat_id", chatID.Get())
 	return get[APIResponseMessage](a.base, "sendMessage", addValues(vals, opts))
 }
 
@@ -359,11 +359,11 @@ func (a API) DownloadFile(filePath string) ([]byte, error) {
 // In the case of supergroups or channels, the user will not be able to return to the chat
 // on their own using invite links, etc., unless unbanned first (through the UnbanChatMember method).
 // The bot must be an administrator in the chat for this to work and must have the appropriate admin rights.
-func (a API) BanChatMember(chatID, userID int64, opts *BanOptions) (res APIResponseBool, err error) {
+func (a API) BanChatMember(chatID, userID ChatIdentifier, opts *BanOptions) (res APIResponseBool, err error) {
 	var vals = make(url.Values)
 
-	vals.Set("chat_id", itoa(chatID))
-	vals.Set("user_id", itoa(userID))
+	vals.Set("chat_id", chatID.Get())
+	vals.Set("user_id", userID.Get())
 	return get[APIResponseBool](a.base, "banChatMember", addValues(vals, opts))
 }
 
@@ -373,11 +373,11 @@ func (a API) BanChatMember(chatID, userID int64, opts *BanOptions) (res APIRespo
 // By default, this method guarantees that after the call the user is not a member of the chat, but will be able to join it.
 // So if the user is a member of the chat they will also be REMOVED from the chat.
 // If you don't want this, use the parameter `OnlyIfBanned`.
-func (a API) UnbanChatMember(chatID, userID int64, opts *UnbanOptions) (res APIResponseBool, err error) {
+func (a API) UnbanChatMember(chatID, userID ChatIdentifier, opts *UnbanOptions) (res APIResponseBool, err error) {
 	var vals = make(url.Values)
 
-	vals.Set("chat_id", itoa(chatID))
-	vals.Set("user_id", itoa(userID))
+	vals.Set("chat_id", chatID.Get())
+	vals.Set("user_id", userID.Get())
 	return get[APIResponseBool](a.base, "unbanChatMember", addValues(vals, opts))
 }
 
